@@ -34,7 +34,7 @@ dependencies:
   day_picker: ^2.1.1
   flutter_time_picker_spinner: ^2.0.0
   scrollable_positioned_list: ^0.3.8
-  drawerbehavior: ^2.2.1
+  drawerbehavior: ^3.0.4
   intl: ^0.18.0
   csc_picker:
   url_launcher: ^6.1.10
