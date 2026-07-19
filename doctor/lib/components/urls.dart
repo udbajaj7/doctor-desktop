@@ -7,7 +7,18 @@ import 'package:doctor/Models/currentPatientModel.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String siteUrl = "https://incue-oep43kcksq-el.a.run.app/";
+/// Base URL of the Incue REST API.
+///
+/// Configurable at build/run time via `--dart-define=INCUE_API_BASE_URL=...`.
+/// Falls back to the production endpoint so existing behaviour is preserved
+/// when no override is supplied. See `.env.example`.
+const String siteUrl = String.fromEnvironment(
+  'INCUE_API_BASE_URL',
+  defaultValue: "https://incue-oep43kcksq-el.a.run.app/",
+);
+
+/// Default timeout applied to outbound HTTP requests to avoid indefinite hangs.
+const Duration kRequestTimeout = Duration(seconds: 30);
 
 String getCitiesUrl = siteUrl + "cities/";
 String phoneRegUrl = siteUrl + "send_otp/";
@@ -92,7 +103,6 @@ late Map<String, String> header;
 void initializeHeader() {
   String? password = prefs.getString("password");
   String? phNo = prefs.getString("phoneNumber");
-  print("initialize header called $phNo:$password");
   String basicAuth = 'Basic ' + base64.encode(utf8.encode('$phNo:$password'));
 
   header = <String, String>{

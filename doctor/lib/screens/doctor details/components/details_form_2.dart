@@ -869,19 +869,11 @@ class _DetailsForm2State extends State<DetailsForm2> {
 
 Future<String> _sendDoctorDetail(DoctorModel doc) async {
   initializeHeader();
-  print("sending data + $header");
-  print(doc.toJson1());
   var response = await http.post(Uri.parse(addDoctorUrl),
       headers: header, body: doc.toJson1());
-  print(doc.toJson1());
-  print(response.statusCode);
-  print(json.decode(response.body).toString());
   if (response.statusCode == HttpStatus.ok) {
-    print("Signup data sent to the backend");
-    print("\n response code " + response.statusCode.toString());
     return response.body;
   } else {
-    print(response.toString());
     return "";
   }
 }

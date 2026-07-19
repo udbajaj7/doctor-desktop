@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
 class PatientModel {
   String email, gender, firstName, lastName, address;
   int id, age;
@@ -45,7 +43,6 @@ class PatientModel {
   }
 
   factory PatientModel.fromJson(Map<String, dynamic> parsedJson) {
-    debugPrint(parsedJson.toString());
     return PatientModel(
       id: parsedJson["id"],
       firstName: parsedJson["first_name"],

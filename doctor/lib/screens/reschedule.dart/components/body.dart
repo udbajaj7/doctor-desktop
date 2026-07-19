@@ -378,7 +378,6 @@ Future<Map<String, List>> getResch(int docId) async {
   var response = await http.post(Uri.parse(getReschUrl),
       body: jsonEncode(<String, dynamic>{"doc_id": docId}), headers: header);
   if (response.statusCode == 200) {
-    debugPrint(response.body);
     var jsonResponse = json.decode(response.body.toString());
     ReschResponse jsonResp = ReschResponse.fromJson(jsonResponse);
     var upList = jsonResp.upcomingResch;

@@ -8,26 +8,28 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<String> logInFuture(String phoneNo, String password) async {
-  var response = await http.post(Uri.parse(signInUrl),
-      body: jsonEncode(<String, String>{
-        "phone_number": phoneNo,
-        "password": password,
-        "user_type": "doctor"
-      }),
-      headers: <String, String>{
-        'Accept': '*/*',
-        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-        'Content-Type': 'application/json',
-      });
-  print("Login response code : ${response.statusCode}");
+  try {
+    var response = await http
+        .post(Uri.parse(signInUrl),
+            body: jsonEncode(<String, String>{
+              "phone_number": phoneNo,
+              "password": password,
+              "user_type": "doctor"
+            }),
+            headers: <String, String>{
+              'Accept': '*/*',
+              'Content-Type': 'application/json',
+            })
+        .timeout(kRequestTimeout);
 
-  if (response.statusCode == 200) {
     var responseJson = json.decode(response.body.toString());
-    print(responseJson);
-    return responseJson["id"].toString();
-  } else {
-    var responseJson = json.decode(response.body.toString());
-    return "Error: " + responseJson["message"];
+    if (response.statusCode == 200) {
+      return responseJson["id"].toString();
+    } else {
+      return "Error: " + responseJson["message"];
+    }
+  } catch (e) {
+    return "Error: Unable to sign in. Please check your connection and try again.";
   }
 }
 
@@ -57,12 +59,7 @@ Future<String> resendOtp(String phoneNo) async {
         'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
         'Content-Type': 'application/json',
       });
-  print("resend otp ");
-  print(jsonEncode(
-      <String, String>{"phone_number": phoneNo, "user_type": "patient"}));
-  print(response.statusCode);
   var responseJson = json.decode(response.body.toString());
-  print(responseJson["otp"]);
   if (response.statusCode == 200) {
     return "Success";
   } else {
@@ -91,15 +88,12 @@ Future<String> changePass(String phoneNo, String password) async {
 }
 
 Future<DoctorModel> getDocInfo(int id) async {
-  print(header);
   try {
     await getPrintRatios();
   } catch (e) {}
 
   var response = await http.post(Uri.parse(getDocInfoUrl),
       body: jsonEncode(<String, int>{"id": id}), headers: header);
-  print(header);
-  print("Getting doctor data for id $id ${response.statusCode}");
   if (response.statusCode == 200) {
     var responseJson = json.decode(response.body.toString());
     GetInfoResponse getInfoResponse = GetInfoResponse.fromJson(responseJson);

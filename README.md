@@ -175,26 +175,31 @@ flutter pub run flutter_launcher_icons
 
 ## Configuration & Environment Variables
 
-This project does **not** use `.env` files. Runtime configuration is defined in code
-and in per‑platform files:
+Flutter resolves configuration at **compile time** via `--dart-define` (not a runtime
+`.env` file). See [`doctor/.env.example`](doctor/.env.example) for the supported keys
+and placeholder values.
 
-| Setting | Location | Notes |
+| Setting | Key / Location | Notes |
 |---|---|---|
-| API base URL (`siteUrl`) | `doctor/lib/components/urls.dart` | Points to the Cloud Run backend. Change here to target another environment. |
-| API endpoints | `doctor/lib/components/urls.dart` | Derived from `siteUrl` / `docUrl`. |
-| Auth credentials | Runtime (via `shared_preferences`) | Phone number + password captured at login, base64‑encoded into the Basic auth header by `initializeHeader()`. |
+| API base URL | `INCUE_API_BASE_URL` (dart-define) → `doctor/lib/components/urls.dart` | Overrides the base URL at build/run time. Falls back to the built-in production default when unset. |
+| Request timeout | `kRequestTimeout` in `doctor/lib/components/urls.dart` | Applied to auth/outbound HTTP calls. |
+| Auth credentials | Runtime (via `shared_preferences`) | Phone number + password captured at login, base64‑encoded into the Basic auth header by `initializeHeader()`. Never logged. |
 | App version | `doctor/pubspec.yaml` (`version:`) | `versionName` / `versionCode` for stores. |
 | Firebase project | `.firebaserc` | Aliases `default` / `prod` → `incue-desktop`. |
 | Hosting public dir | `firebase.json` | Serves the `n/` directory. |
 
-> To point the app at a different backend (e.g. staging), edit `siteUrl` in
-> `doctor/lib/components/urls.dart`.
+Example — point the app at a staging backend:
+
+```bash
+flutter run --dart-define=INCUE_API_BASE_URL=https://staging-api.example.com/
+```
 
 ---
 
 ## Testing
 
-Tests live in `doctor/test`.
+Tests live in `doctor/test` and cover model (de)serialization, the authentication
+header builder, clinic slot parsing, API endpoint configuration and input validation.
 
 ```bash
 cd doctor
@@ -202,12 +207,27 @@ cd doctor
 # Run the full test suite
 flutter test
 
-# Run a single test file
-flutter test test/widget_test.dart
+# Run tests with coverage (writes coverage/lcov.info)
+flutter test --coverage
 
-# Static analysis / linting
+# Run a single test file
+flutter test test/models/doctor_model_test.dart
+
+# Static analysis / type-check
 flutter analyze
+
+# Formatting
+dart format .                               # apply
+dart format --output=none --set-exit-if-changed .   # check only
 ```
+
+### Continuous Integration
+
+GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs on every
+push and pull request to `master` / `main`: dependency install, formatting check,
+static analysis, tests with coverage, a dependency report, and a release web build.
+Dependabot ([`.github/dependabot.yml`](.github/dependabot.yml)) keeps `pub` and GitHub
+Actions dependencies up to date.
 
 ---
 

@@ -15,12 +15,6 @@ Future<MedicineDataModel> getPrescreptionData() async {
   http.Response response =
       await http.get(Uri.parse(getMedicineData), headers: header);
 
-  print(
-      'getPrescreptionData response new ${response.body.substring(0, 3000)} new end');
-
-  int index = response.body.indexOf('Augmentin 625');
-  print('money ${response.body.substring(index, index + 1000)}');
-
   return MedicineDataModel.fromJsonWithDefaultDuration(
       //because the duration data should be hardcoded to 1 week
       jsonDecode(response.body) as Map<String, dynamic>);
@@ -80,7 +74,6 @@ Future<int> savePrescreption({
       .post(Uri.parse(savePrescrption), headers: header, body: body)
       .timeout(Duration(seconds: 5));
   debugPrint('here is the response for save prescription');
-  debugPrint(response.body);
   debugPrint(response.statusCode.toString());
   debugPrint('this is the bookingId $bookingId');
 
@@ -103,7 +96,6 @@ Future<PrescriptionModel> getCurrentPrescreption() async {
   final streamedResponse = await request.send();
   final response = await http.Response.fromStream(streamedResponse);
   debugPrint('getPreviousPrescreption');
-  debugPrint(response.body);
   PrescriptionModel prescriptionModel = PrescriptionModel(
     // clinicalHistory: "",
     // notes: "",
@@ -186,7 +178,6 @@ Future<PrescriptionModel> getPrescription(int bookingId) async {
   );
 
   debugPrint('getPrescreption $bookingId');
-  debugPrint(response.body);
   PrescriptionModel prescriptionModel = PrescriptionModel(
     // clinicalHistory: "",
     // notes: "",
@@ -252,7 +243,6 @@ Future<int> sendNextPatient(
   );
 
   debugPrint('sendNextPatient');
-  debugPrint(response.body);
   debugPrint(response.statusCode.toString());
 
   return response.statusCode;
@@ -273,7 +263,6 @@ Future<int> saveCustomMedicine({
       headers: header, body: body);
 
   debugPrint('saveCustomMedicine');
-  debugPrint(response.body);
   debugPrint(response.statusCode.toString());
 
   return response.statusCode;
@@ -324,7 +313,6 @@ Future<int> savePrescTemplate({
       .post(Uri.parse(savePrescTemplateUrl), headers: header, body: body)
       .timeout(Duration(seconds: 5));
   debugPrint('here is the response for savePrecTemplate');
-  debugPrint(response.body);
   debugPrint(response.statusCode.toString());
 
   return response.statusCode;
@@ -344,7 +332,6 @@ Future<PrescriptionModel> getSavedPrecTemplateByDiagnosis(
   );
 
   debugPrint('getSavedPrecTemplateByDiagnosis');
-  debugPrint(response.body);
   debugPrint(response.statusCode.toString());
 
   Map<String, dynamic> data = jsonDecode(response.body);
@@ -420,7 +407,6 @@ Future<PatientModel> getNextPatient() async {
   );
 
   debugPrint('getNextPatient');
-  debugPrint(response.body);
   debugPrint(response.statusCode.toString());
 
   try {

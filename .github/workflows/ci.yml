@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+# The Flutter application lives in the `doctor/` subdirectory.
+defaults:
+  run:
+    working-directory: doctor
+
+jobs:
+  build:
+    name: Analyze, test & build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java (Android toolchain)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # --- Advisory quality gates -------------------------------------------
+      # This is a large pre-existing codebase; formatting and lint findings are
+      # reported but do not fail the build yet. Run `dart format .` and address
+      # `flutter analyze` findings incrementally, then flip these to hard gates.
+      - name: Check formatting (advisory)
+        run: dart format --output=none --set-exit-if-changed .
+        continue-on-error: true
+
+      - name: Static analysis / type-check (advisory)
+        run: flutter analyze
+        continue-on-error: true
+
+      - name: Dependency report (advisory)
+        run: flutter pub outdated
+        continue-on-error: true
+
+      # --- Hard gates -------------------------------------------------------
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: doctor/coverage/lcov.info
+          if-no-files-found: warn
+
+      - name: Build web (release)
+        run: flutter build web --release

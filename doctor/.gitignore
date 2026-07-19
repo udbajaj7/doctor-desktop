@@ -44,5 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/*.lock
-doctor/pubspec.lock
+# NOTE: pubspec.lock is intentionally committed for this application so that
+# CI and all contributors resolve identical dependency versions.
+# (Run `flutter pub get` locally to generate it.)

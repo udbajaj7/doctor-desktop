@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    # Legacy/experimental screens kept out of tree but not yet deleted.
+    - lib/trash/**
+    - "**/*.g.dart"
+  errors:
+    # Surface accidental sensitive logging as a warning so it is caught in review.
+    avoid_print: warning
+
+linter:
+  rules:
+    avoid_print: true
+    prefer_const_constructors: true
+    unnecessary_this: true

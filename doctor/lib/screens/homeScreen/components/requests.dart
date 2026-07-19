@@ -71,7 +71,6 @@ Future<Map<String,dynamic>> getCurrentPatients(int docId) async {
       headers: header);
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body.toString());
-    debugPrint(response.body);
     BookedResponse jsonResp = BookedResponse.fromJson(jsonResponse);
     List<DoctorBookingsModel> bookList = jsonResp.bookings;
     List<PatientModel> patList = jsonResp.patients;
@@ -121,14 +120,7 @@ Future<String> endAppointmentButtonPressed(int docId, int? bookingID) async {
             "booking_id": bookingID,
           }),
           headers: header);
-  print("sending patient in API request body");
-  print(endAppointmentUrl);
-
-  print(response.statusCode);
-  print(header);
-  print(response.body);
   if (response.statusCode == 200) {
-    debugPrint(response.body);
     return "Done";
   } else
     return "Error";
@@ -143,9 +135,7 @@ Future<String> editTreatmentApi(int bookingId, String? treatment) async {
             "booking_id": bookingId,
           }),
           headers: header);
-  print(response.body);
   if (response.statusCode == 200) {
-    debugPrint(response.body);
     return "Done";
   } else
     return "Error";
@@ -170,7 +160,6 @@ Future<String> sendInButtonPressed(
   }));
   print(response.statusCode);
   if (response.statusCode == 200) {
-    debugPrint(response.body);
     return "Done";
     // Check request
   } else
@@ -188,12 +177,8 @@ Future<String> getBookingQueue(int docId, BuildContext context) async {
       }),
       headers: header);
 
-  print(response.statusCode);
-  print(response.body.toString());
-
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body.toString());
-    debugPrint(response.body);
     BookedResponse jsonResp = BookedResponse.fromJson(jsonResponse);
     List<DoctorBookingsModel> bookList = jsonResp.bookings;
     List<PatientModel> patList = jsonResp.patients;
@@ -220,7 +205,6 @@ Future<String> getReachedQueue(int docId, BuildContext context) async {
   if (response.statusCode == 200) {
     var currentPatients = await getCurrentPatients(docId);
     var jsonResponse = json.decode(response.body.toString());
-    debugPrint("Reached queue ${response.body}");
     ReachedResponse jsonResp = ReachedResponse.fromJson(jsonResponse);
     List<DoctorBookingsModel> bookList = jsonResp.bookings,
         bookCurr = currentPatients["books"];
