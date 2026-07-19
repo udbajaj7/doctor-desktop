@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "incue-desktop",
+    "incue-dekstop": "incue-desktop",
+    "prod": "incue-desktop"
+  },
+  "targets": {},
+  "etags": {}
+}

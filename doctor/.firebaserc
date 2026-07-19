@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "incue-desktop",
+    "desktop": "incue-desktop",
+    " desktop": "incue-desktop",
+    "incue-dekstop": "incue-desktop",
+    "client": "incue-webapp2",
+    "test": "incue-doctor-test",
+    "dekstop": "incue-desktop",
+    "prod": "incue-desktop"
+  },
+  "targets": {},
+  "etags": {}
+}
