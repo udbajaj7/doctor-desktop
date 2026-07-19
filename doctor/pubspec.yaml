@@ -68,7 +68,7 @@ dependencies:
   riverpod: ^2.4.6
   flutter_riverpod: ^2.4.6
   printing: ^5.10.4
-  localstorage: ^4.0.1+4
+  localstorage: ^6.0.0
   dropdown_search: ^5.0.6
   info_popup: ^4.3.1
 
