@@ -62,7 +62,7 @@ dependencies:
   provider: ^6.1.1
   skeletonizer: ^0.8.0
   flutter_svg: ^1.1.6
-  flutter_date_range_picker: ^0.0.14
+  flutter_date_range_picker: ^0.2.1
   textfield_tags: ^2.0.2
   searchable_listview: ^2.8.0
   riverpod: ^2.4.6
